@@ -78,6 +78,20 @@ async function parseEntry(filePath, type, slug) {
   }
 }
 
+// src/site-config.ts
+var import_gray_matter2 = __toESM(require("gray-matter"), 1);
+var import_promises2 = __toESM(require("fs/promises"), 1);
+var import_node_path2 = __toESM(require("path"), 1);
+async function parseSiteConfig(contentDir) {
+  const filePath = import_node_path2.default.join(contentDir, "site.yaml");
+  const raw = await import_promises2.default.readFile(filePath, "utf-8");
+  const wrapped = `---
+${raw}
+---`;
+  const { data } = (0, import_gray_matter2.default)(wrapped);
+  return data;
+}
+
 // src/sorting.ts
 function sortByDateDesc(entries) {
   return [...entries].sort((a, b) => {
@@ -134,12 +148,16 @@ function createContentLoader(options) {
     const discovered = await discoverEntries(contentDir, type);
     return discovered.map((file) => file.slug);
   }
+  async function getSiteConfig() {
+    return parseSiteConfig(contentDir);
+  }
   return {
     getEntries,
     getEntry,
     getAllTags,
     getEntriesByTag,
-    getSlugs
+    getSlugs,
+    getSiteConfig
   };
 }
 // Annotate the CommonJS export names for ESM import in node:

@@ -1,0 +1,22 @@
+personal:
+  name: Test User
+  title: Software Engineer
+  intro: "I build things for the web."
+  available: true
+  github: https://github.com/testuser
+  linkedin: https://linkedin.com/in/testuser
+  email: hello@test.dev
+
+badges:
+  - "🫡 3+ Years of Experience"
+  - "🎓 CS Grad"
+
+experience:
+  - company: Acme Corp
+    role: Software Engineer
+    period: "2023 — present"
+    description: Building things that matter.
+
+code_comments:
+  - currently building, always shipping
+  - mass × acceleration

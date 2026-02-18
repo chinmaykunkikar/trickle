@@ -42,6 +42,20 @@ async function parseEntry(filePath, type, slug) {
   }
 }
 
+// src/site-config.ts
+import matter2 from "gray-matter";
+import fs2 from "fs/promises";
+import path2 from "path";
+async function parseSiteConfig(contentDir) {
+  const filePath = path2.join(contentDir, "site.yaml");
+  const raw = await fs2.readFile(filePath, "utf-8");
+  const wrapped = `---
+${raw}
+---`;
+  const { data } = matter2(wrapped);
+  return data;
+}
+
 // src/sorting.ts
 function sortByDateDesc(entries) {
   return [...entries].sort((a, b) => {
@@ -98,12 +112,16 @@ function createContentLoader(options) {
     const discovered = await discoverEntries(contentDir, type);
     return discovered.map((file) => file.slug);
   }
+  async function getSiteConfig() {
+    return parseSiteConfig(contentDir);
+  }
   return {
     getEntries,
     getEntry,
     getAllTags,
     getEntriesByTag,
-    getSlugs
+    getSlugs,
+    getSiteConfig
   };
 }
 export {

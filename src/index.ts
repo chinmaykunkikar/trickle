@@ -11,6 +11,7 @@ export type {
   LinkedInFrontmatter,
   ProjectFrontmatter,
   QuoteFrontmatter,
+  SiteConfig,
   SnippetFrontmatter,
   ThoughtFrontmatter,
   TilFrontmatter,

@@ -1,6 +1,12 @@
 import { buildEntryPath, discoverEntries } from "./discovery.js"
 import { parseEntry } from "./parser.js"
-import type { ContentEntry, ContentType, ContentTypeMap } from "./schema.js"
+import type {
+  ContentEntry,
+  ContentType,
+  ContentTypeMap,
+  SiteConfig,
+} from "./schema.js"
+import { parseSiteConfig } from "./site-config.js"
 import { sortByDateDesc } from "./sorting.js"
 
 export interface ContentLoaderOptions {
@@ -19,6 +25,7 @@ export interface ContentLoader {
     tag: string,
   ): Promise<ContentEntry<T>[]>
   getSlugs(type: ContentType): Promise<string[]>
+  getSiteConfig(): Promise<SiteConfig>
 }
 
 const CONTENT_TYPES: ContentType[] = [
@@ -89,11 +96,16 @@ export function createContentLoader(
     return discovered.map((file) => file.slug)
   }
 
+  async function getSiteConfig(): Promise<SiteConfig> {
+    return parseSiteConfig(contentDir)
+  }
+
   return {
     getEntries,
     getEntry,
     getAllTags,
     getEntriesByTag,
     getSlugs,
+    getSiteConfig,
   }
 }

@@ -103,6 +103,27 @@ export interface ContentTypeMap {
   ideas: IdeaFrontmatter
 }
 
+/** Site-level configuration (parsed from site.yaml). */
+export interface SiteConfig {
+  personal: {
+    name: string
+    title: string
+    intro: string
+    available: boolean
+    github: string
+    linkedin: string
+    email: string
+  }
+  badges: string[]
+  experience: Array<{
+    company: string
+    role: string
+    period: string
+    description: string
+  }>
+  code_comments: string[]
+}
+
 /** Union of all content type directory names. */
 export type ContentType = keyof ContentTypeMap
 

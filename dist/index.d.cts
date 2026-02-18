@@ -84,6 +84,26 @@ interface ContentTypeMap {
     quotes: QuoteFrontmatter;
     ideas: IdeaFrontmatter;
 }
+/** Site-level configuration (parsed from site.yaml). */
+interface SiteConfig {
+    personal: {
+        name: string;
+        title: string;
+        intro: string;
+        available: boolean;
+        github: string;
+        linkedin: string;
+        email: string;
+    };
+    badges: string[];
+    experience: Array<{
+        company: string;
+        role: string;
+        period: string;
+        description: string;
+    }>;
+    code_comments: string[];
+}
 /** Union of all content type directory names. */
 type ContentType = keyof ContentTypeMap;
 /** A parsed content entry with typed frontmatter. */
@@ -107,7 +127,8 @@ interface ContentLoader {
     getAllTags(): Promise<string[]>;
     getEntriesByTag<T extends ContentType>(type: T, tag: string): Promise<ContentEntry<T>[]>;
     getSlugs(type: ContentType): Promise<string[]>;
+    getSiteConfig(): Promise<SiteConfig>;
 }
 declare function createContentLoader(options: ContentLoaderOptions): ContentLoader;
 
-export { type BaseFrontmatter, type BlogFrontmatter, type ContentEntry, type ContentLoader, type ContentLoaderOptions, type ContentType, type ContentTypeMap, type IdeaFrontmatter, type LinkedInFrontmatter, type ProjectFrontmatter, type QuoteFrontmatter, type SnippetFrontmatter, type ThoughtFrontmatter, type TilFrontmatter, createContentLoader };
+export { type BaseFrontmatter, type BlogFrontmatter, type ContentEntry, type ContentLoader, type ContentLoaderOptions, type ContentType, type ContentTypeMap, type IdeaFrontmatter, type LinkedInFrontmatter, type ProjectFrontmatter, type QuoteFrontmatter, type SiteConfig, type SnippetFrontmatter, type ThoughtFrontmatter, type TilFrontmatter, createContentLoader };
