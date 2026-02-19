@@ -11,7 +11,8 @@ src/
 ├── discovery.ts   # Glob-based file discovery (<type>/*/index.md)
 ├── parser.ts      # gray-matter wrapper, date normalization, draft filtering
 ├── sorting.ts     # Immutable date-descending sort
-└── schema.ts      # All frontmatter types (copied from content repo)
+├── site-config.ts # Parses site.yaml for site-level config (no frontmatter/drafts)
+└── schema.ts      # All frontmatter types + SiteConfig (copied from content repo)
 ```
 
 The data flow is: `discovery` finds files → `parser` reads and parses each one → `sorting` orders the results → `loader` orchestrates it all behind the `ContentLoader` interface.
@@ -24,6 +25,7 @@ The data flow is: `discovery` finds files → `parser` reads and parses each one
 - **`CONTENT_TYPES` array in `loader.ts`** is the source of truth for which directories exist. When adding a new content type, update this array, add the interface to `schema.ts`, and add it to `ContentTypeMap`.
 - **No MDX bundled.** The `content` field returns raw markdown. Consumer handles compilation.
 - **`dist/` is committed** so `npm install github:chinmaykunkikar/trickle` works without a build step at install time.
+- **`getSiteConfig()` reads `site.yaml`**, not markdown. It uses gray-matter for YAML parsing, returns a typed `SiteConfig` object. No slugs, no frontmatter, no draft filtering.
 
 ## Schema sync
 
@@ -33,7 +35,7 @@ The data flow is: `discovery` finds files → `parser` reads and parses each one
 
 ```bash
 npm run build      # tsup → ESM + CJS + .d.ts in dist/
-npm test           # vitest (22 tests across 3 files)
+npm test           # vitest (26 tests across 4 files)
 npm run test:watch # vitest in watch mode
 ```
 
@@ -43,8 +45,9 @@ Tests live in `tests/` with fixture content in `tests/fixtures/`. Fixtures inclu
 - Blog entries (published + draft + older post for sort order testing)
 - A TIL entry
 - A project entry with extra frontmatter fields
+- A `site.yaml` for site-level config testing
 
-Test files map 1:1 to source modules: `discovery.test.ts`, `parser.test.ts`, `loader.test.ts`.
+Test files map 1:1 to source modules: `discovery.test.ts`, `parser.test.ts`, `loader.test.ts`, `site-config.test.ts`.
 
 ## Adding a new content type
 
